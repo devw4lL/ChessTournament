@@ -1,4 +1,5 @@
 import os
+from pprint import pprint
 
 from tinydb import TinyDB, Query
 from src.constants import Constants
@@ -77,6 +78,8 @@ class Manager:
         if db == "tournament":
             if index == -1:
                 return tournaments_db.get(doc_id=len(tournaments_db))
+            elif isinstance(index, int):
+                return tournaments_db.get(doc_id=index)
             else:
                 return tournaments_db.all()
         elif db == "players":
@@ -87,7 +90,7 @@ class Manager:
         return False
 
     def un_serialize_tournament(self, tournaments):
-        return [values for tournament in tournaments for keys, values in tournament.items()]
+        return [values for keys, values in tournaments.items()]
 
     def un_serialize_player(self, players):
         return [values for keys, values in players.items()]

@@ -21,5 +21,8 @@ class MainMenu:
         max_width = [max(map(len, col)) for col in zip(*rows)]
         [print("  ".join((val.ljust(width) for val, width in zip(row, max_width)))) for row in rows]
 
+    def show_countdown(self, count_minutes, count_seconds):
+        print(f'Temps restant {count_minutes} minutes et {count_seconds} secondes')
+
     def get_input(self, func, desc='', example=''):
         return input(f'{func} {desc} {example}')

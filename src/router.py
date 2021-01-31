@@ -1,4 +1,5 @@
 import re
+import threading
 
 from src.views import MainMenu
 from src.constants import Constants
@@ -21,9 +22,9 @@ class Router:
             if self.ctrl.tournament_start_up():
                 self.tournament_run(-1)
         elif self.choice == 2:
-            self.menu.show_tournaments(self.ctrl.get_tournaments(0, finish=False))
-            index = self.check_input(self.menu.get_input("\n\rVeuillez entrer", "Le numéro du tournoi à reprendre: "
-                                                                                "\n\r"))
+            self.menu.show_tournaments(self.ctrl.get_tournaments("all", finish=False))
+            index = self.check_input(self.menu.get_input("\n\rVeuillez entrer", "Le numéro du tournoi à reprendre: ",
+                                                         "\n\r"))
             self.tournament_run(index)
         elif self.choice == 3:
             self.repport()
@@ -34,23 +35,31 @@ class Router:
 
     def tournament_run(self, index):
         self.tournament_running = True
-        self.ctrl.start_tournament(index)
         while True:
             self.menu.show_header(self.const.round_menu)
-            self.check_input(self.menu.get_input("Veuillez entrer", "Le numéro de Menu: \n\r"))
-            if self.choice == 1:  # cloturer round
+            self.check_input(self.menu.get_input("Veuillez entrer", "Le num éro de Menu: \n\r"))
+            if self.choice == 1:
+                self.ctrl.start_tournament(index)
+            elif self.choice == 2:  # chronomètre
+                pass
+                """countdown = threading.Thread(self.ctrl.get_countdown(self.ctrl.tourn.r_time, True), self.menu.get_input('Appuyer sur echap pour quiter le chornometre.'))
+                countdown.start()
+                countdown.join()
+                chr(27)
+                setattr(self.ctrl.get_countdown, 'status', False)"""
+            elif self.choice == 3:  # cloturer round
                 self.ctrl.end_round()
-            elif self.choice == 2:  # editer score joueur
+            elif self.choice == 4:  # editer score joueur
                 self.menu.show_players(self.ctrl.get_players(-1))
                 self.ctrl.edit_player_score(self.check_input(self.menu.get_input("Veuillez entrer", "Le numéro du "
                                                                                                     "joueur: \n\r")))
-            elif self.choice == 3:  # editer classement d'un joueur
+            elif self.choice == 5:  # editer classement d'un joueur
                 self.menu.show_players(self.ctrl.get_players(0))
                 self.ctrl.edit_player_rank()
-            elif self.choice == 4:  # sauvgarder
+            elif self.choice == 6:  # sauvgarder
                 self.ctrl.save_all()
-            elif self.choice == 5:  # menu précédent
-                break
+            elif self.choice == 7:  # menu précédent
+                self.start_up()
             else:
                 self.check_input(self.menu.get_input('', self.choice))
 
