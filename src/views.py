@@ -15,12 +15,18 @@ class MainMenu:
         [print("  ".join((val.ljust(width) for val, width in zip(row, max_width)))) for row in rows]
 
     def show_players(self, args):
+        print(args)
         print(f'**  Entrer le numéro du joueur à éditer:           {"**":>149}\n')
         rows = [['**', f'{i+1})', f'{a[0]}', f'{a[1]}', f'{a[2]}', f'{a[3]}', f'{a[4]}'] for i, a in enumerate(args)]
         rows.insert(0, ["**", "NUMERO", "NOM JOUEUR", "PRENOM JOUEUR", "SURNOM", "SCORE", "RANK"])
         max_width = [max(map(len, col)) for col in zip(*rows)]
         [print("  ".join((val.ljust(width) for val, width in zip(row, max_width)))) for row in rows]
 
+    def show_rounds(self, mode, name):
+        print(f'{mode} du {name}')
+
+    def edit_players(self, mode ):
+        pass
     def show_countdown(self, count_minutes, count_seconds):
         print(f'Temps restant {count_minutes} minutes et {count_seconds} secondes')
 

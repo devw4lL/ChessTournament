@@ -1,6 +1,7 @@
 import re
 import time
 from datetime import datetime, timedelta
+from pprint import pprint
 
 from src.constants import Constants
 from src.views import MainMenu
@@ -60,7 +61,6 @@ class Controler:
         [self.tourn.players_inst.update({a[0]: a[1]}) for a in
          [(*[varname[5]], Players(*varname)) for varname in
           [self.db.un_serialize_player(self.db.load("players", index)) for index in self.tourn.players_ids]]]
-        self.get_first_pairs()
 
     def add_tournament(self):
         if self.get_infos('tournament_informations'):
@@ -83,24 +83,47 @@ class Controler:
         return True
 
     def get_first_pairs(self):
-        players_by_rank = self.tools.sort_by_rank(self.tourn.players_inst)
-        print(players_by_rank)
-        players_inst_list = [k[1] for k in players_by_rank]
+        players_inst_list = [k[1] for k in self.tools.sort_by_rank(self.tourn.players_inst)]
         pairs = [[players_inst_list[i], players_inst_list[i + len(players_inst_list) // 2]] for i in
                  range(len(players_inst_list) // 2)]
-        self.update_opponents(pairs)
         return pairs
+
+    def get_pairs(self):
+        return [2]
 
     def update_opponents(self, pairs_list):
         for player in pairs_list:
-            self.tourn.players_inst[getattr(player[0], 'index')].opponents.append(getattr(player[1], 'index'))
-            self.tourn.players_inst[getattr(player[1], 'index')].opponents.append(getattr(player[0], 'index'))
+            self.tourn.players_inst[player[0].index].opponents.append(player[1].index)
+            self.tourn.players_inst[player[1].index].opponents.append(player[0].index)
+
+    def update_round(self, pairs_list):
+        self.tourn.rounds.append([[self.const.round_name[len(self.tourn.rounds)], self.tools.get_date(),
+                                  self.tools.get_date()]])
+        self.tourn.rounds[len(self.tourn.rounds) - 1].append([([player[0], player[0].score], [player[1], player[1].score])
+                                                             for player in pairs_list])
+
+    def play_round(self):
+        if len(self.tourn.rounds) == 0:
+            first_pairs = self.get_first_pairs()
+            self.update_opponents(first_pairs)
+            self.menu.show_rounds("Lancement", self.const.round_name[len(self.tourn.rounds)])
+            self.update_round(first_pairs)
+        else:
+            pairs = self.get_pairs()
+            self.update_opponents(pairs)
+            self.menu.show_rounds("Lancement", self.const.round_name[len(self.tourn.rounds)])
+            self.update_round(pairs)
+
+
 
     def end_round(self):
-        pass
+        self.menu.show_rounds("Fin", self.const.round_name[len(self.tourn.rounds)-1])
+        self.edit_player_score(self.tourn.players_inst)
 
-    def edit_player_score(self, index):
-        pass
+    def edit_player_score(self, players):
+        [self.db.un_serialize_player(arg) for arg in [{k: getattr(x, k) for (k, v) in self.const.player.items()} for y, x in players.items()]]
+        #[self.menu.show_players(arg) for args in [self.db.un_serialize_player([{k: getattr(x, k) for (k, v) in self.const.player.items()}] for y, x in players.items())] for arg in args]
+
 
     def edit_player_rank(self):
         pass
@@ -112,12 +135,6 @@ class Controler:
 class Tools:
     def __init__(self):
         pass
-
-
-
-    def get_pairs(self, players):
-        for players in players:
-            print(players['nickname'])
 
     def get_date(self):
         now = datetime.now()

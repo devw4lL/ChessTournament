@@ -26,9 +26,7 @@ class Tournament:
         self.description = description
         self.players_ids = players_ids
         self.players_inst = players_inst
-        self.rounds = rounds  # ["Round_1", "dateetheuredebut", "dateetheurefin", [(["instance joueur1", "score j1"], ["instance joueur2", "score j2"]),
-        # (["instance joueur3", "score j3"], ["instance joueur4", "score j4"])
-        # ]
+        self.rounds = rounds
         self.matchs = matchs
         self.finish = finish
 
@@ -93,6 +91,7 @@ class Manager:
         return [values for keys, values in tournaments.items()]
 
     def un_serialize_player(self, players):
+        print("players", players)
         return [values for keys, values in players.items()]
 
 

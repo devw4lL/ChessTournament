@@ -69,13 +69,19 @@ class Constants:
                            f'**    Nom, Prenom, Date d\'anniversaire (JJ/MM/AA), sexe (M/F), Classement {"**":>126}\n'
                            )
 
-        self.round_menu = (f'**   1) Demarrer le tournoi.                               {"**":>141}\n'
-                           f'**   2) Afficher le chronometre.                           {"**":>141}\n'
-                           f'**   3) Fin d\'un round.                                    {"**":>141}\n'
+        self.resume_menu = (f'**   1) Demarrer le tournoi.                               {"**":>141}\n'
+                            f'**   2) Sauvgarder.                                        {"**":>141}\n'
+                            f'**   3) Menu précédent.                                    {"**":>141}\n'
+                            )
+
+        self.round_menu = (f'**   1) Afficher le chronometre.                           {"**":>141}\n'
+                           f'**   2) Lancer le round.                                   {"**":>141}\n'
+                           f'**   3) Cloturer le round.                                 {"**":>141}\n'
                            f'**   4) Editer le score des joueurs.                       {"**":>141}\n'
                            f'**   5) Editer le classement des joueurs.                  {"**":>141}\n'
                            f'**   6) Sauvgarder.                                        {"**":>141}\n'
-                           f'**   7) Menu précédent.                                    {"**":>141}\n')
+                           f'**   7) Menu précédent.                                    {"**":>141}\n'
+                          )
 
         self.rank_menu = (
             f'**{"Entrer le numéro du joueurs, et son nouveau classement":^{self.terminal_width - 4}}**\n'
