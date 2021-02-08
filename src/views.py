@@ -13,22 +13,32 @@ class MainMenu:
         rows.insert(0, ["**", "NUMERO", "NOM DU TOURNOI", "LIEU", "DATE DE DEBUT", "DATE DE FIN"])
         max_width = [max(map(len, col)) for col in zip(*rows)]
         [print("  ".join((val.ljust(width) for val, width in zip(row, max_width)))) for row in rows]
+        print("\n\r\n\r")
 
-    def show_players(self, args):
-        print(args)
-        print(f'**  Entrer le numéro du joueur à éditer:           {"**":>149}\n')
-        rows = [['**', f'{i+1})', f'{a[0]}', f'{a[1]}', f'{a[2]}', f'{a[3]}', f'{a[4]}'] for i, a in enumerate(args)]
+    def show_players(self, args, mode=''):
+        #print("show_players", args)
+        print(f'**  {mode}           {"**":>149}\n')
+        rows = [['**', f'{a[6]})', f'{a[0]}', f'{a[1]}', f'{a[8]}', f'{a[5]}', f'{a[4]}'] for a in args]
         rows.insert(0, ["**", "NUMERO", "NOM JOUEUR", "PRENOM JOUEUR", "SURNOM", "SCORE", "RANK"])
         max_width = [max(map(len, col)) for col in zip(*rows)]
         [print("  ".join((val.ljust(width) for val, width in zip(row, max_width)))) for row in rows]
+        print("\n\r\n\r")
 
     def show_rounds(self, mode, name):
-        print(f'{mode} du {name}')
+        print(f'-----------> {mode} du {name}')
 
-    def edit_players(self, mode ):
-        pass
+    def edit_player(self, player, index, status=''):
+        self.show_players([player], f'EDITION DU JOUEUR: {index} {status}         ')
+
+    def get_new_score(self):
+        return self.get_input("Entrer le nouveau", "score", "EXEMPLE: 1")
+
+    def get_new_rank(self):
+        return self.get_input("Entrer le nouveau", "classement", "EXEMPLE: 25")
+
+
     def show_countdown(self, count_minutes, count_seconds):
-        print(f'Temps restant {count_minutes} minutes et {count_seconds} secondes')
+        print(f'Temps restant {count_minutes} minutes et {count_seconds} secondes\n\r')
 
     def get_input(self, func, desc='', example=''):
-        return input(f'{func} {desc} {example}')
+        return input(f'{func} {desc} {example}\n\r')

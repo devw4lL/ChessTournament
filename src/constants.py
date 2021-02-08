@@ -27,6 +27,7 @@ class Constants:
                            "r_time": "obj.r_time",
                            "description": "obj.description",
                            "players_ids": "obj.players_ids",
+                           "tournament_ids": "obj.tournament_ids",
                            "players_inst": "obj.players_inst",
                            "rounds": "obj.rounds",
                            "matchs": "obj.matchs",
@@ -37,8 +38,8 @@ class Constants:
                        "b_date": "obj.b_date",
                        "sex": "obj.sex",
                        "rank": "obj.rank",
-                       "index": "obj.index",
                        "score": "obj.score",
+                       "player_ids": "obj.player_ids",
                        "opponents": "obj.opponents",
                        "nickname": "obj.nickname"
                        }
