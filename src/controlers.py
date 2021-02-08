@@ -166,6 +166,10 @@ class Controler:
         return pairs_list
 
     def get_pairs(self):
+        """
+        Calcul des paires du deuxième round et suivant.
+        :return: [[<src.models.Players object at 0x000002515A9AB160>,...]
+        """
         return [2]
 
     def update_opponents(self, pairs_list):

@@ -19,17 +19,17 @@ class Router:
     def start_up(self):
         self.menu.show_header(self.const.header, self.const.main_menu)
         self.check_input(self.menu.get_input("Veuillez entrer", "Le numéro de Menu: \n\r"))
-        if self.choice == 1:
+        if self.choice == 1:  # Créer un nouveau tournoi
             if self.ctrl.tournament_start_up():
                 self.run_tournament(-1)
-        elif self.choice == 2:
+        elif self.choice == 2:  # Reprendre un tournoi
             self.menu.show_tournaments(self.ctrl.get_tournaments_from_db("all", finish=False))
             self.check_input(self.menu.get_input("\n\rVeuillez entrer", "Le numéro du tournoi à reprendre: ",
-                                                         "\n\r"))
+                                                 "\n\r"))
             self.run_tournament(self.choice)
-        elif self.choice == 3:
+        elif self.choice == 3:  # Section rapport
             self.repport()
-        elif self.choice == 4:
+        elif self.choice == 4:  # Quit
             self.exit()
         else:
             self.check_input(self.menu.get_input('', self.choice))
@@ -39,7 +39,7 @@ class Router:
         while True:
             self.menu.show_header(self.const.resume_menu)
             self.check_input(self.menu.get_input("Veuillez entrer", "Le numéro de Menu: \n\r"))
-            if self.choice == 1: #démarrer tournoi
+            if self.choice == 1:  # démarrer tournoi
                 self.ctrl.start_tournament(index)
                 self.run_rounds()
             elif self.choice == 6:  # sauvgarder
@@ -80,6 +80,11 @@ class Router:
         pass
 
     def check_input(self, inp):
+        """
+        Vérifie que l'entrée de l'utilisateur est un chiffre.
+        :param inp: user input
+        :return:
+        """
         try:
             self.choice = int(inp)
         except ValueError as e:
