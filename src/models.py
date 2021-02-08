@@ -1,5 +1,4 @@
 import os
-from pprint import pprint
 
 from tinydb import TinyDB, Query
 from src.constants import Constants

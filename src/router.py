@@ -21,12 +21,12 @@ class Router:
         self.check_input(self.menu.get_input("Veuillez entrer", "Le numéro de Menu: \n\r"))
         if self.choice == 1:
             if self.ctrl.tournament_start_up():
-                self.tournament_run(-1)
+                self.run_tournament(-1)
         elif self.choice == 2:
-            self.menu.show_tournaments(self.ctrl.get_tournaments("all", finish=False))
+            self.menu.show_tournaments(self.ctrl.get_tournaments_from_db("all", finish=False))
             self.check_input(self.menu.get_input("\n\rVeuillez entrer", "Le numéro du tournoi à reprendre: ",
                                                          "\n\r"))
-            self.tournament_run(self.choice)
+            self.run_tournament(self.choice)
         elif self.choice == 3:
             self.repport()
         elif self.choice == 4:
@@ -34,14 +34,14 @@ class Router:
         else:
             self.check_input(self.menu.get_input('', self.choice))
 
-    def tournament_run(self, index):
+    def run_tournament(self, index):
         self.tournament_running = True
         while True:
             self.menu.show_header(self.const.resume_menu)
             self.check_input(self.menu.get_input("Veuillez entrer", "Le numéro de Menu: \n\r"))
             if self.choice == 1: #démarrer tournoi
                 self.ctrl.start_tournament(index)
-                self.rounds_run()
+                self.run_rounds()
             elif self.choice == 6:  # sauvgarder
                 self.ctrl.update_all()
             elif self.choice == 7:  # menu précédent
@@ -49,7 +49,7 @@ class Router:
             else:
                 self.check_input(self.menu.get_input('', self.choice))
 
-    def rounds_run(self):
+    def run_rounds(self):
         self.rounds_running = True
         while self.tournament_running and self.rounds_running:
             self.menu.show_header(self.const.round_menu)
@@ -74,7 +74,7 @@ class Router:
                 self.ctrl.update_all()
 
             elif self.choice == 7:  # menu précédent
-                self.tournament_run(-1)
+                self.run_tournament(-1)
 
     def repport(self):
         pass
@@ -86,8 +86,6 @@ class Router:
             self.choice = self.menu.get_input(f'ERREUR: Vous avez entré {inp}, La réponse doit être un chiffre\n\r')
             self.check_input(self.choice)
         return True
-
-
 
     def exit(self):
         raise SystemExit
