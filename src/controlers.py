@@ -174,6 +174,8 @@ class Controler:
         Calcul des paires du deuxième round et suivant.
         :return: [[<src.models.Players object at 0x0000021BC9B4EF70>,
                     <src.models.Players object at 0x0000021BC9C28AC0>],.....]
+
+         -----------------------------NOT WORKING-------------------------------
         """
         p_by_score = [args[1] for args in self.tools.sort_by_score(self.tourn.players_inst)]
         potential_pairs, final_pairs = [], []
