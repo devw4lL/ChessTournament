@@ -158,18 +158,35 @@ class Controler:
     def get_first_pairs(self):
         """
         Calcul des paires du premier round.
-        :return: [[<src.models.Players object at 0x000002515A9AB160>,...]
+        :return: [[<src.models.Players object at 0x0000021BC9B4EF70>,
+                    <src.models.Players object at 0x0000021BC9C28AC0>],.....]
         """
         players_inst_list = [args[1] for args in self.tools.sort_by_rank(self.tourn.players_inst)]
         pairs_list = [[players_inst_list[i], players_inst_list[(len(players_inst_list)//2)+i]] for i in
                       range(len(players_inst_list) // 2)]
+
+        [self.menu.show_pairs([[v for k, v in pair[0].__dict__.items()], [v for k, v in pair[1].__dict__.items()]], i+1)
+         for i, pair in enumerate(pairs_list)]
         return pairs_list
 
     def get_pairs(self):
         """
         Calcul des paires du deuxième round et suivant.
-        :return: [[<src.models.Players object at 0x000002515A9AB160>,...]
+        :return: [[<src.models.Players object at 0x0000021BC9B4EF70>,
+                    <src.models.Players object at 0x0000021BC9C28AC0>],.....]
         """
+        p_by_score = [args[1] for args in self.tools.sort_by_score(self.tourn.players_inst)]
+        potential_pairs, final_pairs = [], []
+        index = 0
+        while len(final_pairs) != len(p_by_score):
+            index += 1
+            potential_pairs.append(self.tools.compare_score_and_rank(p_by_score[0], p_by_score[1]))
+            final_pairs.append(self.tools.compare_by_opponents(potential_pairs, p_by_score))
+            p_by_score = list(set(p_by_score) - set(*final_pairs))
+            self.update_opponents([final_pairs[-1], final_pairs[-2]])
+            self.menu.show_pairs([final_pairs[-1], final_pairs[-2]], index)
+        [self.menu.show_pairs([[v for k, v in pair[0].__dict__.items()], [v for k, v in pair[1].__dict__.items()]],
+                              i + 1) for i, pair in enumerate(final_pairs)]
         return [2]
 
     def update_opponents(self, pairs_list):
@@ -276,6 +293,18 @@ class Tools:
         [(16, <src.models.Players object at 0x00000265A57AE700>),......)]
         """
         return sorted(players.items(), key=lambda x: getattr(x[1], 'first_name'), reverse=True)
+
+    def compare_score_and_rank(self, player_one, player_two):
+        if player_one.score == player_two.score:
+            if player_one.rank >= player_two.rank:
+                return [player_one, player_two]
+            return [player_two, player_one]
+
+    def compare_by_opponents(self, potential_pairs, p_by_score):
+        if potential_pairs[0].ids in potential_pairs[1].opponents:
+            for i in range(len(p_by_score)):
+                if not potential_pairs[0] in potential_pairs[i+1]:
+                    return [potential_pairs[0], potential_pairs[i+1]]
 
 
 class Validator:

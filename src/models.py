@@ -99,6 +99,12 @@ class Manager:
         return [values for keys, values in tournaments.items()]
 
     def un_serialize_player(self, players):
+        """
+
+        :param players: {'first_name': 'al', 'last_name': 'fred', 'b_date': '14/06/1988', 'sex': 'M',
+                          'rank': '12', 'score': 0, 'player_ids': 1, 'opponents': [], 'nickname': 'Joueur_1'}
+        :return:
+        """
         #print("serialize", players)
         return [values for keys, values in players.items()]
 
