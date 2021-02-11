@@ -50,18 +50,18 @@ class Router:
                 self.check_input(self.menu.get_input('', self.choice))
 
     def run_rounds(self):
-        self.rounds_running = True
-        while self.tournament_running and self.rounds_running:
+        while self.tournament_running:
             self.menu.show_header(self.const.round_menu)
             self.check_input(self.menu.get_input("Veuillez entrer", "Le numéro de Menu: \n\r"))
             if self.choice == 1:  # chronomètre
                 self.ctrl.get_countdown()
 
             elif self.choice == 2:  # lancer round
-                self.ctrl.play_round()
+                self.tournament_running = self.ctrl.play_round()
+                self.rounds_running = True
 
             elif self.choice == 3:  # cloturer round
-                self.ctrl.end_round()
+                self.rounds_running = self.ctrl.end_round()
                 self.ctrl.edit_player_score()
 
             elif self.choice == 4:  # editer score joueur

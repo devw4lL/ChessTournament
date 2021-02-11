@@ -130,20 +130,24 @@ class Controler:
         -----------------------NOT FINISH-----------------------------
         :return:
         """
-        if len(self.tourn.rounds) == 0:
+        if len(self.tourn.rounds) == 0:  # 1er round
             first_pairs = self.get_first_pairs()
             self.update_opponents(first_pairs)
             self.menu.show_rounds("Lancement", self.const.round_name[len(self.tourn.rounds)])
             self.update_round(first_pairs)
             self.get_countdown()
-        elif self.tourn.rounds[-1][0][2]:
-            pairs = self.get_pairs()
-            self.update_opponents(pairs)
-            self.menu.show_rounds("Lancement", self.const.round_name[len(self.tourn.rounds)])
-            self.update_round(pairs)
-            self.get_countdown()
+        elif len(self.tourn.rounds) < self.tourn.nb_round:
+            if self.tourn.rounds[-1][0][2]:  # 2éme round j'usqu'a nb_round
+                pairs = self.get_pairs()
+                self.update_opponents(pairs)
+                self.menu.show_rounds("Lancement", self.const.round_name[len(self.tourn.rounds)])
+                self.update_round(pairs)
+                self.get_countdown()
+            else:
+                self.menu.show_rounds("Attendre la fin", self.tourn.rounds[-1][0][0])
         else:
-            return self.menu.show_rounds("Attendre la fin", self.tourn.rounds[-1][0][0])
+            return False
+        return True
 
     def end_round(self):
         """
@@ -152,8 +156,8 @@ class Controler:
         """
         self.tourn.rounds[-1][0][2] = self.tools.get_date()
         self.menu.show_rounds("Fin", self.const.round_name[len(self.tourn.rounds)-1])
-        self.update_all(0)
-        return True
+        ###############self.update_all(0) -----------> NOT WORKING
+        return False
 
     def get_first_pairs(self):
         """
@@ -174,22 +178,19 @@ class Controler:
         Calcul des paires du deuxième round et suivant.
         :return: [[<src.models.Players object at 0x0000021BC9B4EF70>,
                     <src.models.Players object at 0x0000021BC9C28AC0>],.....]
-
-         -----------------------------NOT WORKING-------------------------------
         """
         p_by_score = [args[1] for args in self.tools.sort_by_score(self.tourn.players_inst)]
-        potential_pairs, final_pairs = [], []
-        index = 0
-        while len(final_pairs) != len(p_by_score):
-            index += 1
+        potential_pairs, opponents_pairs, final_pairs = [], [], []
+        while len(opponents_pairs) != len(p_by_score):
             potential_pairs.append(self.tools.compare_score_and_rank(p_by_score[0], p_by_score[1]))
-            final_pairs.append(self.tools.compare_by_opponents(potential_pairs, p_by_score))
-            p_by_score = list(set(p_by_score) - set(*final_pairs))
-            self.update_opponents([final_pairs[-1], final_pairs[-2]])
-            self.menu.show_pairs([final_pairs[-1], final_pairs[-2]], index)
+            opponents_pairs.append(self.tools.compare_by_opponents(potential_pairs, p_by_score))
+            tmp = [f for p in opponents_pairs for f in p]
+            [p_by_score.remove(player) for player in tmp if player in p_by_score]
+            final_pairs.append(*opponents_pairs)
+            potential_pairs.clear(), opponents_pairs.clear()
         [self.menu.show_pairs([[v for k, v in pair[0].__dict__.items()], [v for k, v in pair[1].__dict__.items()]],
                               i + 1) for i, pair in enumerate(final_pairs)]
-        return [2]
+        return final_pairs
 
     def update_opponents(self, pairs_list):
         """
@@ -255,10 +256,10 @@ class Controler:
             if inp in self.tourn.players_ids:
                 return inp
         except ValueError as e:
-            inp = self.menu.get_input(
-                f'ERREUR: Vous avez entré {inp}, La réponse doit être un chiffre\n\r')
-            self.check_player_input(inp)
-        return False
+            print(f'ERREUR: check_player_input')
+
+        return self.check_player_input( self.menu.get_input(
+                f'ERREUR: Vous avez entré {inp}, Le chiffre doit correspondre à un joueur!\n\r'))
 
 
 class Tools:
@@ -300,13 +301,14 @@ class Tools:
         if player_one.score == player_two.score:
             if player_one.rank >= player_two.rank:
                 return [player_one, player_two]
-            return [player_two, player_one]
+        return [player_two, player_one]
 
     def compare_by_opponents(self, potential_pairs, p_by_score):
-        if potential_pairs[0].ids in potential_pairs[1].opponents:
-            for i in range(len(p_by_score)):
-                if not potential_pairs[0] in potential_pairs[i+1]:
-                    return [potential_pairs[0], potential_pairs[i+1]]
+        if potential_pairs[0][0].player_ids in potential_pairs[0][1].opponents:
+            for i in range(1, len(p_by_score)-1):
+                if not potential_pairs[0][0].player_ids in p_by_score[i+1].opponents:
+                    return [potential_pairs[0][0], p_by_score[i+1]]
+        return [potential_pairs[0][0], potential_pairs[0][1]]
 
 
 class Validator:
