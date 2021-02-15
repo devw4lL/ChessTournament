@@ -64,38 +64,39 @@ class Manager:
 
     def update_all(self, obj, index):
         if obj.__class__.__name__ == "Players":
-            players_db.update({k: getattr(obj, k) for (k, v) in self.const.player.items()}, doc_ids=index)
+            print("update_players",obj, index)
+            #players_db.update({k: getattr(obj, k) for (k, v) in self.const.player.items()}, doc_ids=index)
             return True
         elif obj.__class__.__name__ == "Tournament":
+            print("update_tournament", obj, index)
             for k, v in obj.__dict__.items():
                 if isinstance(getattr(obj, k), dict):
-                    tournaments_db.update({k: list(getattr(obj, k))})
+                    print("tourn if", {k: (getattr(obj, k))})
+                    tournaments_db.update({k: list(getattr(obj, k))}, doc_ids=[index])
                 else:
-                    tournaments_db.update({k: getattr(obj, k)})
+                    print("tourn_else", {k: getattr(obj, k)})
+                    tournaments_db.update({k: getattr(obj, k)}, doc_ids=[index])
             return True
-
-    def update_player(self, varname, value, index):
-        var = [{varname[i]: value[i]} for i in range(len(varname))]
-        players_db.update({k: v for (k, v) in var}, doc_ids=index)
 
     def load(self, db, index):
         if db == "tournament":
             if isinstance(index, int):
-                #print("db", tournaments_db.get(doc_id=index))
+                #print("db_load", tournaments_db.get(doc_id=index))
                 return tournaments_db.get(doc_id=index)
-            else:
-                #print("db", tournaments_db.all())
+            else:  # all
+                #print("db_load", tournaments_db.all())
                 return tournaments_db.all()
         elif db == "players":
             if isinstance(index, int):
-                #print("db", players_db.get(doc_id=index))
+                #print("db_load", players_db.get(doc_id=index))
                 return players_db.get(doc_id=index)
             else:
-                #print("db", players_db.all())
+                #print("db_load", players_db.all())
                 return players_db.all()
         return False
 
     def un_serialize_tournament(self, tournaments):
+        #print("serialize_tourn", tournaments, type(tournaments))
         return [values for keys, values in tournaments.items()]
 
     def un_serialize_player(self, players):
@@ -103,8 +104,28 @@ class Manager:
 
         :param players: {'first_name': 'al', 'last_name': 'fred', 'b_date': '14/06/1988', 'sex': 'M',
                           'rank': '12', 'score': 0, 'player_ids': 1, 'opponents': [], 'nickname': 'Joueur_1'}
-        :return:
+        :return: ['al', 'fred', '14/06/1988', 'M', '12', 0, 1, [], 'Joueur_1']
         """
-        #print("serialize", players)
+        #print("serialize_players", players)
         return [values for keys, values in players.items()]
+
+
+
+
+class serialize:
+    def serialize_players_inst(self, obj):
+            def __init__(self, **kwargs):
+                for key, val in kwargs.items():
+                    if type(val) == dict:
+                        setattr(self, key, serialize(**val))
+                    elif type(val) == list:
+                        setattr(self, key, list(map(self.map_entry, val)))
+                    else:  # this is the only addition
+                        setattr(self, key, val)
+
+    def map_entry(self, entry):
+        if isinstance(entry, dict):
+            return serialize(**entry)
+
+        return entry
 

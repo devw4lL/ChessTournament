@@ -21,30 +21,31 @@ class Router:
         self.check_input(self.menu.get_input("Veuillez entrer", "Le numéro de Menu: \n\r"))
         if self.choice == 1:  # Créer un nouveau tournoi
             if self.ctrl.tournament_start_up():
-                self.run_tournament(-1)
+                self.run_tournament(self.ctrl.tourn.tournament_ids)
         elif self.choice == 2:  # Reprendre un tournoi
             self.menu.show_tournaments(self.ctrl.get_tournaments_from_db("all", finish=False))
             self.check_input(self.menu.get_input("\n\rVeuillez entrer", "Le numéro du tournoi à reprendre: ",
                                                  "\n\r"))
-            self.run_tournament(self.choice)
+            self.run_tournament(self.choice, 1)
         elif self.choice == 3:  # Section rapport
             self.repport()
         elif self.choice == 4:  # Quit
+            print("quit")
             self.exit()
         else:
             self.check_input(self.menu.get_input('', self.choice))
 
-    def run_tournament(self, index):
+    def run_tournament(self, index, mode):
         self.tournament_running = True
         while True:
             self.menu.show_header(self.const.resume_menu)
             self.check_input(self.menu.get_input("Veuillez entrer", "Le numéro de Menu: \n\r"))
             if self.choice == 1:  # démarrer tournoi
-                self.ctrl.start_tournament(index)
+                self.ctrl.resume_tournament(index)
                 self.run_rounds()
-            elif self.choice == 6:  # sauvgarder
+            elif self.choice == 2:  # sauvgarder
                 self.ctrl.update_all()
-            elif self.choice == 7:  # menu précédent
+            elif self.choice == 3:  # menu précédent
                 self.start_up()
             else:
                 self.check_input(self.menu.get_input('', self.choice))

@@ -1,5 +1,6 @@
 import re
 from datetime import datetime, timedelta
+from pprint import pprint
 
 
 from src.constants import Constants
@@ -28,15 +29,16 @@ class Controler:
             if self.add_player():
                 return True
 
-    def start_tournament(self, index):
+    def resume_tournament(self, index):
         """
-        Chargement d'un tournoi et des joueurs associés au tournoi.
-        :param index: ids du tournoi dans la db
+        Chargement d'un tournoi commencé et non fini.
+        :param index:
         :return:
         """
         self.tourn = Tournament(*self.db.un_serialize_tournament(dict(self.db.load('tournament', index))))
-        [self.tourn.players_inst.update({a[0]: Players(*a[1])}) for a in
-         [(index, self.db.un_serialize_player(self.db.load("players", index))) for index in self.tourn.players_ids]]
+        for player in self.get_players_from_db(self.tourn.players_inst):
+            self.tourn.players_inst.append(Players(*player))
+            self.tourn.players_inst.pop(0)
 
     def add_tournament(self):
         """
@@ -47,10 +49,11 @@ class Controler:
             tourn_infos = [item['varname'] for item in self.const.tournament_informations]
             self.tourn = Tournament(name=tourn_infos[0], location=tourn_infos[1], start_date=tourn_infos[2],
                                     end_date=tourn_infos[3], nb_round=tourn_infos[4], r_time=tourn_infos[5],
-                                    description=tourn_infos[6], players_ids=[], tournament_ids=0, players_inst={},
+                                    description=tourn_infos[6], players_ids=[], tournament_ids=0, players_inst=[],
                                     rounds=[], matchs=[], finish=False)
             ids = self.db.save(self.tourn)
             self.tourn.tournament_ids = ids
+        self.update_tournament(self.tourn.tournament_ids)
         return True
 
     def add_player(self):
@@ -58,7 +61,7 @@ class Controler:
         Création de 8 joueurs.
         :return:
         """
-        for i in range(8):
+        for i in range(1):  # Attention remettre 8
             self.get_infos('players_informations')
             player = [item['varname'] for item in self.const.players_informations]
             player_infos = Players(first_name=player[0], last_name=player[1], b_date=player[2],
@@ -66,19 +69,23 @@ class Controler:
                                    nickname=self.const.players_nickname[i])
             ids = self.db.save(player_infos)
             player_infos.player_ids = ids
-            self.tourn.tournament_ids = ids
-
+            self.tourn.players_inst.append(ids)
+            self.tourn.players_ids.append(ids)
+        self.update_tournament(self.tourn.tournament_ids)
         return True
 
-    def get_tournaments_from_db(self, index, finish):
-        return [self.db.un_serialize_tournament(args) for args in
-                self.db.load("tournament", index) if args['finish'] == finish]
+    def get_tournaments_from_db(self, index, finish=True):
+        if index == 'all':
+            return [self.db.un_serialize_tournament(args) for args in
+                    self.db.load("tournament", index) if args['finish'] == finish]
+        else:
+            return [self.db.un_serialize_tournament(dict(self.db.load("tournament", index)))]
 
     def get_players_from_db(self, index):
         """
         Chargement de joueurs depuis la db.
-        :param index: all = tout les joeurs enregistré, int() joueur possédant l'id index.
-        :return:
+        :param index: all = tout les joeurs enregistrés, int() joueur possédant l'id index.
+        :return: [['al', 'fred', '14/06/1988', 'M', '12', 0, 1, [], 'Joueur_1'],..........]
         """
         if index == "all":
             return [args for args in [self.db.un_serialize_player(self.db.load("players", "all"))]]
@@ -86,18 +93,22 @@ class Controler:
             return [args for args in [self.db.un_serialize_player(self.db.load("players", index)) for index in
                                       self.tourn.players_ids]]
 
-    def get_players_from_inst(self, index):
+    def get_players_from_inst_ids(self, index):
         """
-        Chargement de joueurs depuis self.tourn.players_inst (tournoi en cours).
+        Chargement des joueurs depuis self.tourn.players_inst (tournoi en cours).
+        Transforme les players_ids en list d'infos.
         :param index: all = tout les joeurs enregistré, int() joueur possédant l'id index.
         :return: [['henry', 'titi', '30/08/1988', 'M', '85', 0, 9, [13], 'Joueur_1'],.....]
         """
         if index == "all":
-            return [self.db.un_serialize_player(values) for values in
-                                [player.__dict__ for player in [players for players in
-                                                                self.tourn.players_inst.values()]]]
+            return [[getattr(p, k) for (k, v) in self.const.player.items()] for p in
+                    [player for player in [players for players in self.tourn.players_inst]]]
         else:
-            return [player for player in self.tourn.players_inst[index].__dict__.values()]
+            return [getattr(self.tourn.players_inst[index], k) for (k, v) in self.const.player.items()]
+
+    def get_players_ids_from_inst(self):
+        return [player.player_ids for player in self.tourn.players_inst]
+
 
     def get_infos(self, mode):
         """
@@ -136,7 +147,7 @@ class Controler:
             self.menu.show_rounds("Lancement", self.const.round_name[len(self.tourn.rounds)])
             self.update_round(first_pairs)
             self.get_countdown()
-        elif len(self.tourn.rounds) < self.tourn.nb_round:
+        elif len(self.tourn.rounds) < int(self.tourn.nb_round):
             if self.tourn.rounds[-1][0][2]:  # 2éme round j'usqu'a nb_round
                 pairs = self.get_pairs()
                 self.update_opponents(pairs)
@@ -153,10 +164,10 @@ class Controler:
         """
         Fin de round: Ajout date/heure de fin et update de la db (tounoi en cours).
         :return:
+        ------------------------NOT WORKING---------------------------
         """
         self.tourn.rounds[-1][0][2] = self.tools.get_date()
         self.menu.show_rounds("Fin", self.const.round_name[len(self.tourn.rounds)-1])
-        ###############self.update_all(0) -----------> NOT WORKING
         return False
 
     def get_first_pairs(self):
@@ -165,12 +176,12 @@ class Controler:
         :return: [[<src.models.Players object at 0x0000021BC9B4EF70>,
                     <src.models.Players object at 0x0000021BC9C28AC0>],.....]
         """
-        players_inst_list = [args[1] for args in self.tools.sort_by_rank(self.tourn.players_inst)]
+        players_inst_list = self.tools.sort_by_rank(self.tourn.players_inst)
         pairs_list = [[players_inst_list[i], players_inst_list[(len(players_inst_list)//2)+i]] for i in
                       range(len(players_inst_list) // 2)]
-
-        [self.menu.show_pairs([[v for k, v in pair[0].__dict__.items()], [v for k, v in pair[1].__dict__.items()]], i+1)
-         for i, pair in enumerate(pairs_list)]
+        [self.menu.show_pairs([[v for k, v in pair[0].__dict__.items()], [v for k, v in pair[1].__dict__.items()]],
+                              i + 1) for i, pair in enumerate(pairs_list)]
+        print("pair_list", pairs_list)
         return pairs_list
 
     def get_pairs(self):
@@ -179,7 +190,8 @@ class Controler:
         :return: [[<src.models.Players object at 0x0000021BC9B4EF70>,
                     <src.models.Players object at 0x0000021BC9C28AC0>],.....]
         """
-        p_by_score = [args[1] for args in self.tools.sort_by_score(self.tourn.players_inst)]
+        print("p-score", self.tourn.players_inst)
+        p_by_score = self.tools.sort_by_score(self.tourn.players_inst)
         potential_pairs, opponents_pairs, final_pairs = [], [], []
         while len(opponents_pairs) != len(p_by_score):
             potential_pairs.append(self.tools.compare_score_and_rank(p_by_score[0], p_by_score[1]))
@@ -190,17 +202,18 @@ class Controler:
             potential_pairs.clear(), opponents_pairs.clear()
         [self.menu.show_pairs([[v for k, v in pair[0].__dict__.items()], [v for k, v in pair[1].__dict__.items()]],
                               i + 1) for i, pair in enumerate(final_pairs)]
+        print("final_pairs", final_pairs)
         return final_pairs
 
     def update_opponents(self, pairs_list):
         """
-        Enregistrement des adversaires affronté par chaque joueurs ( dans self.tourn.players_inst )
+        Enregistrement des adversaires affrontés par chaque joueur ( dans self.tourn.players_inst )
         :param pairs_list: [[<src.models.Players object at 0x000002515A9AB160>,...]
         :return:
         """
         for player in pairs_list:
-            self.tourn.players_inst[player[0].player_ids].opponents.append(player[1].player_ids)
-            self.tourn.players_inst[player[1].player_ids].opponents.append(player[0].player_ids)
+            player[0].opponents.append(player[1].player_ids)
+            player[1].opponents.append(player[0].player_ids)
 
     def update_round(self, pairs_list):
         """
@@ -216,34 +229,45 @@ class Controler:
                                                               for player in pairs_list])
 
     def edit_player_score(self):
-        self.menu.show_players(self.get_players_from_inst('all'))
+        self.menu.show_players(self.get_players_from_inst_ids('all'))
         index = self.check_player_input(self.menu.get_input("Entrer le numéro du joueur", "à éditer", "EXEMPLE: 1\n\r"))
-        self.menu.edit_player(self.get_players_from_inst(index), index)
+        self.menu.edit_player(self.get_players_from_inst_ids(index - 1), index - 1)
         new_score = self.menu.get_new_score()
         if self.validator.is_positiv_float(new_score):
             self.tourn.players_inst[index].score += float(new_score)
         else:
             new_score = self.menu.get_new_score()
-        return self.menu.edit_player(self.get_players_from_inst(index), index, "FINI!")
+        return self.menu.edit_player(self.get_players_from_inst_ids(index), index, "FINI!")
 
     def edit_player_rank(self):
-        self.menu.show_players(self.get_players_from_inst('all'))
+        self.menu.show_players(self.get_players_from_inst_ids('all'))
         index = self.check_player_input(self.menu.get_input("Entrer le numéro du joueur", "à éditer", "EXEMPLE: 1\n\r"))
-        self.menu.edit_player(self.get_players_from_inst(index), index)
+        self.menu.edit_player(self.get_players_from_inst_ids(index - 1), index - 1)
         new_rank = self.menu.get_new_rank()
         if self.validator.is_positiv_int(new_rank):
             self.tourn.players_inst[index].rank = new_rank
         else:
             new_rank = self.menu.get_new_rank()
-        return self.menu.edit_player(self.get_players_from_inst(index), index, "FINI!")
+        return self.menu.edit_player(self.get_players_from_inst_ids(index), index, "FINI!")
 
-    def update_all(self, index):
+    def update_tournament(self, tourn_index):
+        self.db.update_all(self.tourn, tourn_index)
+        return True
+
+    def update_all(self, tourn_index):
         """
         -----------------------------NOT WORKING-------------------------------
         :param index:
         :return:
         """
-        self.db.update_all(self.tourn, index)
+        print("update_all_controller", tourn_index)
+        print(self.tourn.players_inst)
+        self.tourn.players_inst = self.get_players_ids_from_inst()
+        print(self.tourn.players_inst)
+        if tourn_index:
+            self.db.update_all(self.tourn, tourn_index)
+            for player in self.tourn.players_inst:
+                self.db.update_all(player, player.player_ids)
 
     def check_player_input(self, inp):
         """
@@ -277,7 +301,7 @@ class Tools:
         :return:
         [(16, <src.models.Players object at 0x00000265A57AE700>),......)]
         """
-        return sorted(players.items(), key=lambda x: int(getattr(x[1], 'score')), reverse=True)
+        return sorted(players, key=lambda x: int(getattr(x, 'score')))
 
     def sort_by_rank(self, players):
         """
@@ -286,7 +310,7 @@ class Tools:
         :return:
         [(16, <src.models.Players object at 0x00000265A57AE700>),......)]
         """
-        return sorted(players.items(), key=lambda x: int(getattr(x[1], 'rank')), reverse=True)
+        return sorted(players, key=lambda x: int(getattr(x, 'rank')), reverse=True)
 
     def sort_by_alpha(self, players):
         """
@@ -295,7 +319,7 @@ class Tools:
         :return:
         [(16, <src.models.Players object at 0x00000265A57AE700>),......)]
         """
-        return sorted(players.items(), key=lambda x: getattr(x[1], 'first_name'), reverse=True)
+        return sorted(players, key=lambda x: getattr(x, 'first_name'), reverse=True)
 
     def compare_score_and_rank(self, player_one, player_two):
         if player_one.score == player_two.score:

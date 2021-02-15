@@ -8,6 +8,11 @@ class MainMenu:
         [print(arg) for arg in args]
 
     def show_tournaments(self, args):
+        """
+        -------------- A REFAIRE ACCEPTE UN DICT ----------------------------
+        :param args:
+        :return:
+        """
         print(f'**  Entrer le numéro du tournoi à reprendre:       {"**":>149}\n')
         rows = [['**', f'{i+1})', f'{a[0]}', f'{a[1]}', f'{a[2]}', f'{a[3]}'] for i, a in enumerate(args)]
         rows.insert(0, ["**", "NUMERO", "NOM DU TOURNOI", "LIEU", "DATE DE DEBUT", "DATE DE FIN"])
@@ -17,7 +22,7 @@ class MainMenu:
 
     def show_players(self, args, mode=''):
         """
-
+         -------------- A REFAIRE ACCEPTE UN DICT ----------------------------
         :param args: [['al', 'fred', '14/06/1988', 'M', '12', 0, 1, [], 'Joueur_1'], ....]
         :param mode: Commentaire
         :return:
