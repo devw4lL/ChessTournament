@@ -30,7 +30,6 @@ class Constants:
                            "tournament_ids": "obj.tournament_ids",
                            "players_inst": "obj.players_inst",
                            "rounds": "obj.rounds",
-                           "matchs": "obj.matchs",
                            "finish": "obj.finish"
                            }
         self.player = {"first_name": "obj.first_name",
@@ -70,7 +69,7 @@ class Constants:
                            f'**    Nom, Prenom, Date d\'anniversaire (JJ/MM/AA), sexe (M/F), Classement {"**":>126}\n'
                            )
 
-        self.resume_menu = (f'**   1) Demarrer le tournoi.                               {"**":>141}\n'
+        self.resume_menu = (f'**   1) Demarrer le nouveau tournoi.                       {"**":>141}\n'
                             f'**   2) Sauvgarder.                                        {"**":>141}\n'
                             f'**   3) Menu précédent.                                    {"**":>141}\n'
                             )
