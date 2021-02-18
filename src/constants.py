@@ -43,10 +43,12 @@ class Constants:
                        "nickname": "obj.nickname"
                        }
         self.players_nickname = ["Joueur_1", "Joueur_2", "Joueur_3", "Joueur_4",
-                                 "Joueur_5", "Joueur_6", "Joueur_7", "Joueur_8"]
+                                 "Joueur_5", "Joueur_6", "Joueur_7", "Joueur_8"
+                                 ]
 
         self.round_name = ["Round_1", "Round_2", "Round_3", "Round_4",
-                           "Round_5", "Round_6", "Round_7", "Round_8"]
+                           "Round_5", "Round_6", "Round_7", "Round_8"
+                           ]
 
         self.header = (f'{"Bienvenu dans votre gestionnaire de tournoi":*^{self.terminal_width}}\n'
                        f'{"":*^{self.terminal_width}}\n'
@@ -58,7 +60,8 @@ class Constants:
         self.main_menu = (f'**   1) Creér un nouveau tournoi.          {"**":>157}\n'
                           f'**   2) Reprendre un tournoi.              {"**":>157}\n'
                           f'**   3) Générer un rapport.                {"**":>157}\n'
-                          f'**   4) Quitter.                           {"**":>157}')
+                          f'**   4) Quitter.                           {"**":>157}'
+                          )
 
         self.tournament_menu = (f'**    Entrer les informations concernant le nouveau tournoi: {"**":>139}\n'
                                 f'**    Nom du tournoi, Lieu du tournoi, Date de debut (JJ/MM/AA), Date de fin, '
@@ -88,18 +91,33 @@ class Constants:
             f'**{"Séparer les informations avec une virgule":^{self.terminal_width - 4}}**\n'
             f'-----> EXEMPLE: 1, 85 \n'
             f'{"**":<0}{"**":>{self.terminal_width - 2}}\n'
-            f'{"":*^{self.terminal_width}}')
+            f'{"":*^{self.terminal_width}}'
+                         )
 
         self.score_menu = (f'**   Entrer le numéro du joueurs, et son nouveau score:               {"**":>141}\n'
                            f'**   Séparer les informations avec une virgule:                       {"**":>141}\n'
                            f'-----> EXEMPLE: 1, 2 \n'
                            f'{"**":<0}{"**":>{self.terminal_width - 2}}\n'
-                           f'{"":*^{self.terminal_width}}')
+                           f'{"":*^{self.terminal_width}}'
+                           )
+
+        self.end_tournament = (f'{"":*^{self.terminal_width}}\n'
+                               f'**{"----------FIN DU TOURNOI----------":^{self.terminal_width - 4}}**\n'
+                               f'{"":*^{self.terminal_width}}\n'
+                               )
+
+        self.quit_tournament = (f'**{"----------ATTENTION TOURNOI EN COURS----------":^{self.terminal_width - 4}}**\n'
+                                f'**{"--VOULLEZ VOUS SAUVGARDER AVANT DE QUITTER ?--":^{self.terminal_width - 4}}**\n' 
+                                f'**   1) OUI.                                               {"**":>141}\n'
+                                f'**   2) NON.                                               {"**":>141}\n'
+                               )
 
         self.report_menu = (f'**   1) Tout les joueurs par ordre alphabétique.             {"**":>139}\n'
                             f'**   2) Tout les joueurs par classement.                     {"**":>139}\n'
-                            f'**   3) Tout les joeurs d\'un tournoi par odre alphabétique. {"**":>140}\n'
-                            f'**   4) Tout les joeurs d\'un tournoi par classement.        {"**":>140}\n'
-                            f'**   5) Tout les tournois.                                   {"**":>139}\n'
+                            f'**   3) Tout les tournois.                                   {"**":>139}\n'
+                            f'**   4) Tout les joeurs d\'un tournoi par odre alphabétique. {"**":>140}\n'
+                            f'**   5) Tout les joeurs d\'un tournoi par classement.        {"**":>140}\n'
                             f'**   6) Tout les rounds d\'un tournoi.                       {"**":>140}\n'
-                            f'**   7) Tout les matchs d\'un tournoi.                       {"**":>140}\n')
+                            f'**   7) Tout les matchs d\'un tournoi.                       {"**":>140}\n'
+                            f'**   8) Menu précédent.                                      {"**":>140}\n'
+                            )

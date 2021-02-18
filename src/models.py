@@ -1,19 +1,21 @@
 import os
 
-from tinydb import TinyDB, Query
+from tinydb import TinyDB
 from src.constants import Constants
 from src.utils import Tools
 
 # ----------Database init----------------------------------------------------
-db_path = TinyDB(os.path.join(os.path.dirname(__file__), "db", "db.json"))
-players_db = db_path.table('players')
-tournaments_db = db_path.table('tournaments')
+
 
 
 # -----------------------------------------------------------------------------
 
 
 class Tournament:
+    """
+    La classe Tournaments représente entièrement un tournoi.
+    Attention seul les ids (correspondant à la players_db) des joueurs sont stocké danq Tournament.
+    """
     def __init__(self, name, location, start_date, end_date, nb_round, r_time, description, players_ids,
                  tournament_ids, players_inst, rounds, finish):
         self.name = name
@@ -47,9 +49,13 @@ class Tournament:
                 player.update_player()
         except ValueError as e:
             print(f'Erreur dans src.models.Tournament {e}')
+        return True
 
 
 class Players:
+    """
+    Classe représentant un joueurs.
+    """
     def __init__(self, first_name, last_name, b_date, sex, rank, score, player_ids, opponents, nickname):
         self.first_name = first_name
         self.last_name = last_name
@@ -100,7 +106,7 @@ class RunTournaments:
         Création de 8 joueurs.
         :return:
         """
-        self.player = Players(first_name=player_infos[0], last_name=player_infos[1], b_date=player_infos[2],
+        self.player = Players(first_name=player_infos[0].title(), last_name=player_infos[1], b_date=player_infos[2],
                               sex=player_infos[3], rank=int(player_infos[4]), score=0, player_ids=0, opponents=[],
                               nickname=self.const.players_nickname[nickname_id])
         ids = self.player.save_player()
@@ -114,7 +120,6 @@ class RunTournaments:
         """
         Chargement d'un tournoi commencé et non fini.
         :param index: Ids du tournoi à reprendre.
-        :return:
         """
         self.current_tourn = self.db.get_tournament_from_db(
             self.db.load('Tournament', int(index))['tournament_ids'])
@@ -164,15 +169,12 @@ class RunTournaments:
         """
         Enregistrement des adversaires affrontés par chaque joueur ( dans self.tourn.players_inst )
         :param pairs_list: [[<src.models.Players object at 0x000002515A9AB160>,...]
-        :return:
         """
         for player in self.current_pairs:
             p1 = self.current_tourn.players_inst.index(player[0])
             p2 = self.current_tourn.players_inst.index(player[1])
             self.current_tourn.players_inst[p1].opponents.append(player[1].player_ids)
             self.current_tourn.players_inst[p2].opponents.append(player[0].player_ids)
-            # player[0].opponents.append(player[1].player_ids)  # pour les pairs en cours
-            # player[1].opponents.append(player[0].player_ids)  # pour les pairs en cours
         self.current_tourn.update_all_players()
         return True
 
@@ -196,6 +198,11 @@ class RunTournaments:
         self.current_pairs.clear()
         return True
 
+    def update_all(self):
+        self.current_tourn.update_tournament()
+        self.current_tourn.update_all_players()
+        return True
+
     def edit_score(self, ids, new_score):
         [setattr(player, 'score', (player.score + float(new_score)))
          for player in self.current_tourn.players_inst if getattr(player, 'player_ids') == ids]
@@ -208,50 +215,52 @@ class RunTournaments:
 
 
 class Manager:
+    """
+    Manadger des bases de données tournaments_db & players_db.
+    """
 
     def __init__(self):
         self.const = Constants()
+        self.db_path = TinyDB(os.path.join(os.path.dirname(__file__), "db", "db.json"))
+        self.players_db = self.db_path.table('players')
+        self.tournaments_db = self.db_path.table('tournaments')
+
+
 
     def save(self, obj):
         if obj.__class__.__name__ == "Players":
-            ids = players_db.insert({k: getattr(obj, k) for (k, v) in self.const.player.items()})
+            ids = self.players_db.insert({k: getattr(obj, k) for (k, v) in self.const.player.items()})
             return ids
         elif obj.__class__.__name__ == "Tournament":
-            ids = tournaments_db.insert({k: getattr(obj, k) for (k, v) in self.const.tournament.items()})
+            ids = self.tournaments_db.insert({k: getattr(obj, k) for (k, v) in self.const.tournament.items()})
             return ids
 
     def update(self, obj, index):
         if obj.__class__.__name__ == "Players":
-            # print("update_players ", obj, index)
             for k, v in obj.__dict__.items():
-                # print("---------------", k, v)
-                players_db.update({k: getattr(obj, k)}, doc_ids=[index])
+                self.players_db.update({k: getattr(obj, k)}, doc_ids=[index])
             return True
         elif obj.__class__.__name__ == "Tournament":
-            # print("update_tournament", obj, index)
             for k, v in obj.__dict__.items():
-                # print("---------------", k, v)
-                tournaments_db.update({k: getattr(obj, k)}, doc_ids=[index])
+                self.tournaments_db.update({k: getattr(obj, k)}, doc_ids=[index])
             return True
 
     def load(self, db, index=0):
         if db == "Tournament":
             if not index:
-                return [self.get_tournament_from_db(all_tourn['tournament_ids']) for all_tourn in tournaments_db.all()]
-            # print("load")
-            return tournaments_db.get(doc_id=index)
+                return [self.get_tournament_from_db(all_tourn['tournament_ids']) for all_tourn in self.tournaments_db.all()]
+            return self.tournaments_db.get(doc_id=index)
 
         elif db == "Player":
             if not index:
-                # print("db_load_all_player", players_db.all())
-                return [self.get_player_from_db(players_ids['player_ids']) for players_ids in players_db.all()]
-            return players_db.get(doc_id=index)
+                return [self.get_player_from_db(players_ids['player_ids']) for players_ids in self.players_db.all()]
+            return self.players_db.get(doc_id=index)
         return False
 
     def get_player_from_db(self, index=0):
         """
-        Récupére les informations du joueur à l'index donnée et renvoi une instance de la class Players
-        :param index: int (ids d'un player dans la players_db)
+        Récupére les informations du joueur à l'index donnée et renvoi une instance de la class Players.
+        :param index: int (ids d'un player dans la players_db).
         :return: Instance d'un player.
         """
         player_infos = [values for keys, values in self.load("Player", index).items()]
@@ -260,37 +269,30 @@ class Manager:
     def get_tournament_from_db(self, index=0):
         """
         Récupére les informations du tournoi à l'index donnée dans la db.
-        :param index: int (ids d'un tournoi dans tournaments_db )
+        :param index: int (ids d'un tournoi dans tournaments_db ).
         :return: Instance d'un tournoi.
         """
         tournament_infos = [values for keys, values in self.load("Tournament", index).items()]
         return Tournament(*tournament_infos)
 
-    def all_tournaments(self, finish=False):
-        return [tournament for tournament in self.load('Tournament') if not finish]
+    def all_tournaments(self):
+        """
+        :return: Instances de tout les tournois dans la db.
+        """
+        return [tournament for tournament in self.load('Tournament')]
+
+    def get_tournaments_by_status(self, finish=False):
+        """
+        :param finish: True = tournoi fini, False = tournoi non fini.
+        :return: Instances de tout les tournois dans la db  en fonction de son status.
+        """
+        return [tournament for tournament in self.load('Tournament') if tournament.finish == finish]
 
     def all_players(self):
+        """
+        :return: Instances de tout les joueurs de le db.
+        """
         return [players for players in self.load('Player')]
-
-    def un_serialize_tournament(self, tournaments):
-        """
-        -------------Renvoi des instances !!!!!!!
-        :param tournaments:
-        :return:
-        """
-        # print("serialize_tourn", tournaments, type(tournaments))
-        return [values for keys, values in tournaments.items()]
-
-    def un_serialize_player(self, players):
-        """
-        -------------Renvoi des instances !!!!!!!
-        :param players: {'first_name': 'al', 'last_name': 'fred', 'b_date': '14/06/1988', 'sex': 'M',
-                          'rank': '12', 'score': 0, 'player_ids': 1, 'opponents': [], 'nickname': 'Joueur_1'}
-        :return: ['al', 'fred', '14/06/1988', 'M', '12', 0, 1, [], 'Joueur_1']
-        """
-        # print("serialize_players", players)
-        return [values for keys, values in players.items()]
-
 
 if __name__ == '__main__':
     M = Manager()

@@ -1,39 +1,48 @@
-import re
-import threading
-
 from src.views import MainMenu
 from src.constants import Constants
 from src.controlers import Controler
+from src.utils import Tools
 
 
 class Router:
+    """
+    La classe Router est une interface entre les views et le controlleur.
+    """
 
     def __init__(self):
         self.menu = MainMenu()
         self.const = Constants()
         self.ctrl = Controler()
+        self.tools = Tools()
         self.choice = ''
         self.tournament_running = False
         self.rounds_running = False
 
     def start_up(self):
+        """
+        Lancement du programme
+        """
         self.menu.show_header(self.const.header, self.const.main_menu)
         self.check_input(self.menu.get_input("Veuillez entrer", "Le numéro de Menu: \n\r"))
         if self.choice == 1:  # Créer un nouveau tournoi
-            self.run_tournament(self.ctrl.create_new_tournament_and_players())
+            self.ctrl.create_new_tournament_and_players()
+            self.run_tournament()
         elif self.choice == 2:  # Reprendre un tournoi
             self.ctrl.resume_tournament()
             self.tournament_running = True
             self.run_rounds()
         elif self.choice == 3:  # Section rapport
-            self.repport()
+            self.repport()  # <<<<<<--------------------------------------------------------------------
         elif self.choice == 4:  # Quit
             print("quit")
             self.exit()
         else:
             self.check_input(self.menu.get_input('', self.choice))
 
-    def run_tournament(self, index):
+    def run_tournament(self):
+        """
+        Lancement du tournoi
+        """
         self.tournament_running = True
         while True:
             self.menu.show_header(self.const.resume_menu)
@@ -42,13 +51,17 @@ class Router:
                 self.ctrl.resume_tournament()
                 self.ctrl.play_round()
             elif self.choice == 2:  # sauvgarder
-                self.ctrl.update_all()
+                self.ctrl.tourn.update_all()
             elif self.choice == 3:  # menu précédent
+                self.previous()
                 self.start_up()
             else:
                 self.check_input(self.menu.get_input('', self.choice))
 
     def run_rounds(self):
+        """
+        Lancement d'un round.
+        """
         while self.tournament_running:
             self.menu.show_header(self.const.round_menu)
             self.check_input(self.menu.get_input("Veuillez entrer", "Le numéro de Menu: \n\r"))
@@ -64,13 +77,51 @@ class Router:
             elif self.choice == 5:  # editer classement d'un joueur
                 self.ctrl.edit_player_rank()
             elif self.choice == 6:  # sauvgarder
-                self.ctrl.update_all()
+                self.ctrl.tourn.update_all()
             elif self.choice == 7:  # menu précédent
-                #------------------- demandé si sauvgarder car le tournoi est en cours -----------------
-                self.run_tournament(-1)
+                self.previous()
+                self.run_tournament()
+
+    def previous(self):
+        """
+        Gestion du passage à un menu précéfent, propose une sauvgarde si un tournoi est en cours.
+        """
+        if self.rounds_running or self.tournament_running:
+            self.menu.show_header(self.const.quit_tournament)
+            self.check_input(self.menu.get_input("Entrer le numéro correspondant: \n\r"))
+            if self.choice == 1:
+                self.ctrl.tourn.update_all()
+        return True
 
     def repport(self):
-        pass
+        """
+        Générateur de rapport.
+        """
+        while True:
+            self.menu.show_header(self.const.report_menu)
+            self.check_input(self.menu.get_input("Veuillez entrer", "Le numéro de Menu: \n\r"))
+            if self.choice == 1:  # Tout les joueurs par ordre alphabétique.
+                self.menu.show_players(self.tools.sort_by_alpha(self.ctrl.db.all_players())[::-1])
+            elif self.choice == 2:  # Tout les joueurs par classement.
+                self.menu.show_players(self.tools.sort_by_rank(self.ctrl.db.all_players()))
+            elif self.choice == 3:  # Tout les tournois.
+                self.menu.show_tournaments(self.ctrl.db.all_tournaments())
+            elif self.choice == 4:  # Tout les joeurs d\'un tournoi par odre alphabétique.
+                self.menu.show_players(self.tools.sort_by_rank([self.ctrl.db.get_player_from_db(ids)
+                                                                for ids in
+                                                                self.ctrl.get_specified_tournaments().players_ids])[
+                                       ::-1])
+            elif self.choice == 5:  # Tout les joeurs d\'un tournoi par classement.
+                self.menu.show_players(self.tools.sort_by_alpha([self.ctrl.db.get_player_from_db(ids)
+                                                                 for ids in
+                                                                 self.ctrl.get_specified_tournaments().players_ids]))
+            elif self.choice == 6:  # Tout les rounds d\'un tournoi.
+                self.menu.show_rounds(self.ctrl.parse_rounds(self.ctrl.get_specified_tournaments())[1])
+            elif self.choice == 7:  # Tout les matchs d\'un tournoi.
+                self.menu.show_matchs(self.ctrl.parse_rounds(self.ctrl.get_specified_tournaments())[0])
+            elif self.choice == 8:  # menu précédent
+                self.previous()
+                self.run_tournament()
 
     def check_input(self, inp):
         """

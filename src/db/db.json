@@ -1,7 +1,7 @@
 {
   "players": {
     "1": {
-      "first_name": "al",
+      "first_name": "Al",
       "last_name": "fred",
       "b_date": "14/06/1988",
       "sex": "M",
@@ -12,7 +12,7 @@
       "nickname": "Joueur_1"
     },
     "2": {
-      "first_name": "bea",
+      "first_name": "Bea",
       "last_name": "trice",
       "b_date": "12/05/1988",
       "sex": "F",
@@ -23,7 +23,7 @@
       "nickname": "Joueur_2"
     },
     "3": {
-      "first_name": "clem",
+      "first_name": "Clem",
       "last_name": "entine",
       "b_date": "25/08/1988",
       "sex": "F",
@@ -34,7 +34,7 @@
       "nickname": "Joueur_3"
     },
     "4": {
-      "first_name": "dav",
+      "first_name": "Dav",
       "last_name": "id",
       "b_date": "26/05/1988",
       "sex": "M",
@@ -45,7 +45,7 @@
       "nickname": "Joueur_4"
     },
     "5": {
-      "first_name": "emi",
+      "first_name": "Emi",
       "last_name": "lie",
       "b_date": "12/03/1988",
       "sex": "F",
@@ -56,7 +56,7 @@
       "nickname": "Joueur_5"
     },
     "6": {
-      "first_name": "fab",
+      "first_name": "Fab",
       "last_name": "ienne",
       "b_date": "23/05/1988",
       "sex": "F",
@@ -67,7 +67,7 @@
       "nickname": "Joueur_6"
     },
     "7": {
-      "first_name": "ge",
+      "first_name": "Ge",
       "last_name": "rald",
       "b_date": "10/02/1988",
       "sex": "M",
@@ -78,7 +78,7 @@
       "nickname": "Joueur_7"
     },
     "8": {
-      "first_name": "iv",
+      "first_name": "Iv",
       "last_name": "an",
       "b_date": "13/07/1988",
       "sex": "M",
@@ -89,7 +89,7 @@
       "nickname": "Joueur_8"
     },
     "9": {
-      "first_name": "henry",
+      "first_name": "Henry",
       "last_name": "titi",
       "b_date": "30/08/1988",
       "sex": "M",
@@ -100,7 +100,7 @@
       "nickname": "Joueur_1"
     },
     "10": {
-      "first_name": "eloise",
+      "first_name": "Eloise",
       "last_name": "battant",
       "b_date": "15/08/1988",
       "sex": "F",
@@ -111,7 +111,7 @@
       "nickname": "Joueur_2"
     },
     "11": {
-      "first_name": "sophie",
+      "first_name": "Sophie",
       "last_name": "contente",
       "b_date": "23/04/1988",
       "sex": "F",
@@ -122,7 +122,7 @@
       "nickname": "Joueur_3"
     },
     "12": {
-      "first_name": "anthony",
+      "first_name": "Anthony",
       "last_name": "lejeune",
       "b_date": "12/03/1988",
       "sex": "M",
@@ -133,7 +133,7 @@
       "nickname": "Joueur_4"
     },
     "13": {
-      "first_name": "antoine",
+      "first_name": "Antoine",
       "last_name": "lamotte",
       "b_date": "16/05/1988",
       "sex": "M",
@@ -144,7 +144,7 @@
       "nickname": "Joueur_5"
     },
     "14": {
-      "first_name": "laurie",
+      "first_name": "Laurie",
       "last_name": "lascie",
       "b_date": "14/07/1988",
       "sex": "F",
@@ -155,7 +155,7 @@
       "nickname": "Joueur_6"
     },
     "15": {
-      "first_name": "morgan",
+      "first_name": "Morgan",
       "last_name": "piedporc",
       "b_date": "16/08/1988",
       "sex": "M",
@@ -166,7 +166,7 @@
       "nickname": "Joueur_7"
     },
     "16": {
-      "first_name": "camille",
+      "first_name": "Camille",
       "last_name": "franki",
       "b_date": "16/09/1988",
       "sex": "F",
@@ -177,7 +177,7 @@
       "nickname": "Joueur_8"
     },
     "17": {
-      "first_name": "greg",
+      "first_name": "Greg",
       "last_name": "ory",
       "b_date": "12/12/2021",
       "sex": "M",
@@ -188,8 +188,8 @@
       "nickname": "Joueur_1"
     },
     "18": {
-      "first_name": "gar",
-      "last_name": "fild",
+      "first_name": "Gar",
+      "last_name": "field",
       "b_date": "10/12/2020",
       "sex": "M",
       "rank": 29,
@@ -210,7 +210,7 @@
       "nickname": "Joueur_3"
     },
     "20": {
-      "first_name": "sa",
+      "first_name": "Sa",
       "last_name": "rah",
       "b_date": "07/08/1987",
       "sex": "F",
@@ -221,7 +221,7 @@
       "nickname": "Joueur_4"
     },
     "21": {
-      "first_name": "pas",
+      "first_name": "Pas",
       "last_name": "cal",
       "b_date": "14/06/1967",
       "sex": "M",
@@ -232,7 +232,7 @@
       "nickname": "Joueur_5"
     },
     "22": {
-      "first_name": "re",
+      "first_name": "Re",
       "last_name": "mond",
       "b_date": "05/05/1952",
       "sex": "M",
@@ -243,7 +243,7 @@
       "nickname": "Joueur_6"
     },
     "23": {
-      "first_name": "gui",
+      "first_name": "Gui",
       "last_name": "llaume",
       "b_date": "03/08/1988",
       "sex": "M",
@@ -254,7 +254,7 @@
       "nickname": "Joueur_7"
     },
     "24": {
-      "first_name": "arn",
+      "first_name": "Arn",
       "last_name": "old",
       "b_date": "12/09/1986",
       "sex": "M",
@@ -265,127 +265,148 @@
       "nickname": "Joueur_8"
     },
     "25": {
-      "first_name": "rqe",
+      "first_name": "Rqe",
       "last_name": "wbv",
       "b_date": "14/02/1988",
       "sex": "M",
       "rank": 58,
-      "score": 0,
+      "score": 2.0,
       "player_ids": 25,
       "opponents": [
         29,
-        32
+        32,
+        29,
+        27,
+        28,
+        26
       ],
       "nickname": "Joueur_1"
     },
     "26": {
-      "first_name": "serty",
+      "first_name": "Serty",
       "last_name": "wdfg",
       "b_date": "15/09/1994",
       "sex": "M",
       "rank": 64,
-      "score": 0,
+      "score": 1.0,
       "player_ids": 26,
       "opponents": [
         30,
-        27
+        27,
+        30,
+        28,
+        32,
+        25
       ],
       "nickname": "Joueur_2"
     },
     "27": {
-      "first_name": "rtqezt",
+      "first_name": "Rtqezt",
       "last_name": "fdg",
       "b_date": "12/07/1978",
       "sex": "M",
       "rank": 66,
-      "score": 0,
+      "score": 2.0,
       "player_ids": 27,
       "opponents": [
         31,
-        26
+        26,
+        31,
+        25,
+        30,
+        32
       ],
       "nickname": "Joueur_3"
     },
     "28": {
-      "first_name": "ezt",
+      "first_name": "Ezt",
       "last_name": "vcb",
       "b_date": "15/10/1985",
       "sex": "M",
       "rank": 72,
-      "score": 0,
+      "score": 1.0,
       "player_ids": 28,
       "opponents": [
         32,
-        29
+        29,
+        32,
+        26,
+        25,
+        30
       ],
       "nickname": "Joueur_4"
     },
     "29": {
-      "first_name": "rezt",
+      "first_name": "Rezt",
       "last_name": "xcvv",
       "b_date": "19/08/19887",
       "sex": "F",
       "rank": 88,
-      "score": 0,
+      "score": 2.0,
       "player_ids": 29,
       "opponents": [
         25,
-        28
+        28,
+        25,
+        31,
+        31,
+        31
       ],
       "nickname": "Joueur_5"
     },
     "30": {
-      "first_name": "rqet",
+      "first_name": "Rdfgt",
       "last_name": "cvb",
       "b_date": "08/02/1975",
       "sex": "F",
       "rank": 90,
-      "score": 0,
+      "score": 1.0,
       "player_ids": 30,
       "opponents": [
         26,
-        31
+        31,
+        26,
+        32,
+        27,
+        28
       ],
       "nickname": "Joueur_6"
     },
     "31": {
-      "first_name": "rezt",
+      "first_name": "Akfxg",
       "last_name": "cxvb",
       "b_date": "17/09/1988",
       "sex": "F",
       "rank": 98,
-      "score": 0,
+      "score": 2.0,
       "player_ids": 31,
       "opponents": [
         27,
-        30
+        30,
+        27,
+        29,
+        29,
+        29
       ],
       "nickname": "Joueur_7"
     },
     "32": {
-      "first_name": "tdwfg",
+      "first_name": "Tdwfg",
       "last_name": "xxcvb",
       "b_date": "19/08/1982",
       "sex": "F",
       "rank": 125,
-      "score": 0,
+      "score": 1.0,
       "player_ids": 32,
       "opponents": [
         28,
-        25
+        25,
+        28,
+        30,
+        26,
+        27
       ],
       "nickname": "Joueur_8"
-    },
-    "33": {
-      "first_name": "dwfg",
-      "last_name": "wdgf",
-      "b_date": "14/15/2021",
-      "sex": "M",
-      "rank": 152,
-      "score": 0,
-      "player_ids": 33,
-      "opponents": [],
-      "nickname": "Joueur_1"
     }
   },
   "tournaments": {
@@ -478,8 +499,158 @@
       ],
       "tournament_ids": 4,
       "players_inst": [],
-      "rounds": [],
-      "finish": false
+      "rounds": [
+        [["Round_1", "02/17/2021, 15:41:04", "02/17/2021, 15:41:06"], [[[32, 0], [28, 0]], [[31, 0], [27, 0]], [[30, 0], [26, 0]], [[29, 0], [25, 0]]]
+        ],
+      [
+          [
+            "Round_2",
+            "02/17/2021, 15:42:07",
+            "02/17/2021, 15:43:44"
+          ],
+          [
+            [
+              [
+                28,
+                0.0
+              ],
+              [
+                26,
+                0.0
+              ]
+            ],
+            [
+              [
+                32,
+                0.0
+              ],
+              [
+                30,
+                0.0
+              ]
+            ],
+            [
+              [
+                27,
+                1.0
+              ],
+              [
+                25,
+                1.0
+              ]
+            ],
+            [
+              [
+                31,
+                1.0
+              ],
+              [
+                29,
+                1.0
+              ]
+            ]
+          ]
+        ],
+        [
+          [
+            "Round_3",
+            "02/17/2021, 15:44:41",
+            "02/17/2021, 15:44:54"
+          ],
+          [
+            [
+              [
+                30,
+                0.0
+              ],
+              [
+                27,
+                1.0
+              ]
+            ],
+            [
+              [
+                32,
+                0.0
+              ],
+              [
+                26,
+                0.0
+              ]
+            ],
+            [
+              [
+                25,
+                2.0
+              ],
+              [
+                28,
+                1.0
+              ]
+            ],
+            [
+              [
+                31,
+                2.0
+              ],
+              [
+                29,
+                2.0
+              ]
+            ]
+          ]
+        ],
+        [
+          [
+            "Round_4",
+            "02/17/2021, 15:45:57",
+            "02/17/2021, 15:46:03"
+          ],
+          [
+            [
+              [
+                28,
+                1.0
+              ],
+              [
+                30,
+                1.0
+              ]
+            ],
+            [
+              [
+                32,
+                1.0
+              ],
+              [
+                27,
+                2.0
+              ]
+            ],
+            [
+              [
+                25,
+                2.0
+              ],
+              [
+                26,
+                1.0
+              ]
+            ],
+            [
+              [
+                31,
+                2.0
+              ],
+              [
+                29,
+                2.0
+              ]
+            ]
+          ]
+        ]
+      ],
+      "finish": true
     }
   }
 }
