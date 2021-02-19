@@ -116,9 +116,11 @@ class Router:
                                                                  for ids in
                                                                  self.ctrl.get_specified_tournaments().players_ids]))
             elif self.choice == 6:  # Tout les rounds d\'un tournoi.
-                self.menu.show_rounds(self.ctrl.parse_rounds(self.ctrl.get_specified_tournaments())[1])
+                self.ctrl.get_specified_tournaments()
+                self.menu.show_rounds(self.ctrl.parse_rounds()[1])
             elif self.choice == 7:  # Tout les matchs d\'un tournoi.
-                self.menu.show_matchs(self.ctrl.parse_rounds(self.ctrl.get_specified_tournaments())[0])
+                self.ctrl.get_specified_tournaments()
+                self.menu.show_matchs(self.ctrl.parse_rounds()[0])
             elif self.choice == 8:  # menu précédent
                 self.previous()
                 self.run_tournament()

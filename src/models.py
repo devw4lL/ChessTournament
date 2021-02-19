@@ -4,12 +4,6 @@ from tinydb import TinyDB
 from src.constants import Constants
 from src.utils import Tools
 
-# ----------Database init----------------------------------------------------
-
-
-
-# -----------------------------------------------------------------------------
-
 
 class Tournament:
     """
@@ -132,6 +126,7 @@ class RunTournaments:
         """
         for ids in self.current_tourn.players_ids:
             self.current_tourn.players_inst.append(self.db.get_player_from_db(ids))
+        return True
 
     def get_first_pairs(self):
         """
@@ -225,8 +220,6 @@ class Manager:
         self.players_db = self.db_path.table('players')
         self.tournaments_db = self.db_path.table('tournaments')
 
-
-
     def save(self, obj):
         if obj.__class__.__name__ == "Players":
             ids = self.players_db.insert({k: getattr(obj, k) for (k, v) in self.const.player.items()})
@@ -294,7 +287,3 @@ class Manager:
         """
         return [players for players in self.load('Player')]
 
-if __name__ == '__main__':
-    M = Manager()
-
-    print(M.get_tournament_from_db(1))

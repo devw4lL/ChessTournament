@@ -25,7 +25,6 @@ class MainMenu:
         :param player: Instance de la class Player.
         :param mode: Commentaire
         """
-        # print("show_players", player)
         print(f'**  {mode}{"**":>{self.terminal_width - len(mode) - 4}}\n')
         rows = [['**', f'{player.player_ids})', f'{player.first_name}', f'{player.last_name}', f'{player.nickname}',
                  f'{player.score}', f'{player.rank}'] for player in players]

@@ -84,7 +84,7 @@ class Constants:
                            f'**   5) Editer le classement des joueurs.                  {"**":>141}\n'
                            f'**   6) Sauvgarder.                                        {"**":>141}\n'
                            f'**   7) Menu précédent.                                    {"**":>141}\n'
-                          )
+                           )
 
         self.rank_menu = (
             f'**{"Entrer le numéro du joueurs, et son nouveau classement":^{self.terminal_width - 4}}**\n'
@@ -92,7 +92,7 @@ class Constants:
             f'-----> EXEMPLE: 1, 85 \n'
             f'{"**":<0}{"**":>{self.terminal_width - 2}}\n'
             f'{"":*^{self.terminal_width}}'
-                         )
+        )
 
         self.score_menu = (f'**   Entrer le numéro du joueurs, et son nouveau score:               {"**":>141}\n'
                            f'**   Séparer les informations avec une virgule:                       {"**":>141}\n'
@@ -107,10 +107,10 @@ class Constants:
                                )
 
         self.quit_tournament = (f'**{"----------ATTENTION TOURNOI EN COURS----------":^{self.terminal_width - 4}}**\n'
-                                f'**{"--VOULLEZ VOUS SAUVGARDER AVANT DE QUITTER ?--":^{self.terminal_width - 4}}**\n' 
+                                f'**{"--VOULLEZ VOUS SAUVGARDER AVANT DE QUITTER ?--":^{self.terminal_width - 4}}**\n'
                                 f'**   1) OUI.                                               {"**":>141}\n'
                                 f'**   2) NON.                                               {"**":>141}\n'
-                               )
+                                )
 
         self.report_menu = (f'**   1) Tout les joueurs par ordre alphabétique.             {"**":>139}\n'
                             f'**   2) Tout les joueurs par classement.                     {"**":>139}\n'

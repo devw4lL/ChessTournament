@@ -2,9 +2,9 @@ import re
 from datetime import datetime, timedelta
 
 from src.constants import Constants
-from src.views import MainMenu
-from src.utils import Tools
 from src.models import Manager, RunTournaments
+from src.utils import Tools
+from src.views import MainMenu
 
 
 class Controler:
@@ -19,7 +19,7 @@ class Controler:
         self.tools = Tools()
         self.db = Manager()
         self.tourn = RunTournaments()
-        self.report = RunTournaments()
+        self.report = None
         self.players_list = []
 
     def create_new_tournament_and_players(self):
@@ -165,9 +165,14 @@ class Controler:
             self.check_tournament_ids(self.menu.get_input('Entrer le numéro du tournoi.', 'EXEMPLE:', '2')))
         return self.report
 
-    def parse_rounds(self, tournament):
+    def parse_rounds(self):
+        """
+        Sépare les rounds et les matchs, détermine qui est le gagnant entre chaque matchs.
+        :param tournament: obj: Instance Tournament généré par get_specified_tournaments().
+        :return: list: de tout les rounds et list: de tout les matchs.
+        """
         all_rounds, all_matchs = [], []
-        for rounds in tournament.rounds:
+        for rounds in self.report.rounds:
             all_rounds.append(rounds[0])
             for i, matchs in enumerate(rounds[1]):
                 j1_ids, j1_s, j2_ids, j2_s = matchs[0][0], matchs[0][1], matchs[1][0], matchs[1][1]
@@ -208,7 +213,6 @@ class Controler:
         except ValueError as e:
             print(f'ERREUR: check_tournament_ids')
         return False
-
 
 
 class Validator:
@@ -258,7 +262,3 @@ class Validator:
         except ValueError as e:
             print(f'ERREUR: Validator.is_positiv_float {e}')
 
-
-if __name__ == '__main__':
-    C = Controler()
-    print(C.resume_tournament())
