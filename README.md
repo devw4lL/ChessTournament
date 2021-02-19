@@ -2,7 +2,7 @@
 #                                                        **Chess Tournament**
 ## **Presentation:**
 
-L'application Chass Tournament est une application de gestion de tournoi d'échec suivant le système suisse.
+L'application Chess Tournament est une application de gestion de tournoi d'échec suivant le système suisse.
 Cette application utilise une base de donnée géré par TinyDB, produisant un fichier db.json.
 
 
