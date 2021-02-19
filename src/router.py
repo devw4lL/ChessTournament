@@ -134,7 +134,8 @@ class Router:
         try:
             self.choice = int(inp)
         except ValueError as e:
-            self.choice = self.menu.get_input(f'ERREUR: Vous avez entré {inp}, La réponse doit être un chiffre\n\r')
+            self.choice = self.menu.get_input(f'ERREUR {e}: Vous avez entré {inp}, '
+                                              f'La réponse doit être un chiffre\n\r')
             self.check_input(self.choice)
         return True
 

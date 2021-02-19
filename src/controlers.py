@@ -49,7 +49,8 @@ class Controler:
         :return: int: ids du en cours.
         """
         self.menu.show_tournaments(self.db.get_tournaments_by_status(finish=False))
-        self.tourn.reload_tourn(self.check_tournament_ids(self.menu.get_input('Entrer le numéro du tournoi à reprendre.', 'EXEMPLE:', '2')))
+        self.tourn.reload_tourn(self.check_tournament_ids(self.menu.get_input('Entrer le numéro du tournoi'
+                                                                              ' à reprendre.', 'EXEMPLE:', '2')))
         self.tourn.reload_players()
         self.menu.show_infos(f'Vous venez de charger le tounoi: {self.tourn.current_tourn.tournament_ids}\n\r'
                              f'Contenant les joueurs : \n\r')
@@ -144,9 +145,11 @@ class Controler:
         """
         Chronomètre de round, si le temps est dépassé lancement de self.end_round().
         """
-        countdown = timedelta(minutes=int(self.tourn.current_tourn.r_time)) - \
-                    (datetime.now() - datetime.strptime(self.tourn.current_tourn.rounds[-1][0][1],
-                                                        "%m/%d/%Y, %H:%M:%S"))
+        countdown = timedelta(minutes=int(self.tourn.current_tourn.r_time)) - (datetime.now() -
+                                                                               datetime.strptime(
+                                                                                   self.tourn.current_tourn.rounds[-1][
+                                                                                       0][1],
+                                                                                   "%m/%d/%Y, %H:%M:%S"))
         r_time = timedelta(minutes=int(self.tourn.current_tourn.r_time))
         if r_time >= countdown:
             self.menu.show_countdown(((countdown.seconds % 3600) // 60), (countdown.seconds % 60))
@@ -177,11 +180,11 @@ class Controler:
             for i, matchs in enumerate(rounds[1]):
                 j1_ids, j1_s, j2_ids, j2_s = matchs[0][0], matchs[0][1], matchs[1][0], matchs[1][1]
                 if j1_s < j2_s:
-                    all_matchs.append([i+1, j2_ids, j2_s, j1_ids, j1_s, rounds[0][0]])
+                    all_matchs.append([i + 1, j2_ids, j2_s, j1_ids, j1_s, rounds[0][0]])
                 elif j1_s == j2_s:
-                    all_matchs.append([i+1, j2_ids, j2_s, j1_ids, j1_s, rounds[0][0]])
+                    all_matchs.append([i + 1, j2_ids, j2_s, j1_ids, j1_s, rounds[0][0]])
                 else:
-                    all_matchs.append([i+1, j1_ids, j1_s, j2_ids, j2_s, rounds[0][0]])
+                    all_matchs.append([i + 1, j1_ids, j1_s, j2_ids, j2_s, rounds[0][0]])
         return all_matchs, all_rounds
 
     def check_player_input(self, inp):
@@ -195,7 +198,7 @@ class Controler:
             if inp in self.tourn.current_tourn.players_ids:
                 return inp
         except ValueError as e:
-            print(f'ERREUR: check_player_input')
+            print(f'ERREUR {e}: check_player_input')
 
         return self.check_player_input(self.menu.get_input(
             f'ERREUR: Vous avez entré {inp}, Le chiffre doit correspondre à un joueur!\n\r'))
@@ -208,10 +211,10 @@ class Controler:
         """
         try:
             inp = int(inp)
-            if inp in range(len(self.db.tournaments_db)+1):
+            if inp in range(len(self.db.tournaments_db) + 1):
                 return inp
         except ValueError as e:
-            print(f'ERREUR: check_tournament_ids')
+            print(f'ERREUR{e}: check_tournament_ids')
         return False
 
 
@@ -261,4 +264,3 @@ class Validator:
             print(f'ERREUR: Validator.is_positiv_float {e}')
         except ValueError as e:
             print(f'ERREUR: Validator.is_positiv_float {e}')
-

@@ -7,6 +7,7 @@ Cette application utilise une base de donnée géré par TinyDB, produisant un f
 
 
 ### **_utilisation_**
+
 **--Créer un tournoi.**
 
 Cette section vous permet de créer un nouveau tournoi.
@@ -40,6 +41,7 @@ Ce fichier peut être échanger entre ordinateur.
 tinydb~=4.4.0
 
 ## **Windows install**
+
 cd **/ChessTournament/
 
 python -m venv venv
@@ -61,4 +63,21 @@ source /venv/bin/activate
 pip install -r requirements.txt
 
 python /ChessTounament/main.py
+
+------------------------------------------------------------
+### **Utilisation de Flake8**
+
+##### **Installet Flake8 et son plugin de génération de rapport html:**
+
+pip -install flake8 flake8_html
+
+#### **Fichier de configuration:**
+
+Le fichier setup.cfg à la racine du projet contient les configurations
+demandés, cependant vous pouvez les modifier dans ce fichier.
+
+#### **Générer un rpport:**
+
+flake8 src --format=html --htmldir=flake8-rapport
+
 
