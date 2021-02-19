@@ -150,7 +150,7 @@ class RunTournaments:
         if not self.current_tourn.players_inst:
             self.reload_players()
         p_by_score = self.tools.sort_by_score(self.current_tourn.players_inst)
-        potential_pairs, opponents_pairs, final_pairs = [], [], []
+        potential_pairs, opponents_pairs = [], []
         while len(opponents_pairs) != len(p_by_score):
             potential_pairs.append(self.tools.compare_score_and_rank(p_by_score[0], p_by_score[1]))
             opponents_pairs.append(self.tools.compare_by_opponents(potential_pairs, p_by_score))
@@ -241,7 +241,8 @@ class Manager:
     def load(self, db, index=0):
         if db == "Tournament":
             if not index:
-                return [self.get_tournament_from_db(all_tourn['tournament_ids']) for all_tourn in self.tournaments_db.all()]
+                return [self.get_tournament_from_db(all_tourn['tournament_ids']) for all_tourn in
+                        self.tournaments_db.all()]
             return self.tournaments_db.get(doc_id=index)
 
         elif db == "Player":
@@ -286,4 +287,3 @@ class Manager:
         :return: Instances de tout les joueurs de le db.
         """
         return [players for players in self.load('Player')]
-
