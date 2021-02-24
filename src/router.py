@@ -1,7 +1,7 @@
 from src.views import MainMenu
 from src.constants import Constants
 from src.controlers import Controler
-from src.utils import Tools
+from src.modules.utils import Tools
 
 
 class Router:
